@@ -14,9 +14,9 @@ arrow.locales.EnglishLocale.timeframes["now"] = "now"
 # Boot the app
 app = Flask(__name__)
 app.config.from_pyfile("settings.cfg")
-redis = StrictRedis(app.config["REDIS_HOST"], 
-                    app.config["REDIS_PORT"], 
-                    db=0, 
+redis = StrictRedis(app.config["REDIS_HOST"],
+                    app.config["REDIS_PORT"],
+                    db=0,
                     password=app.config["REDIS_PASSWORD"])
 
 
@@ -24,21 +24,36 @@ redis = StrictRedis(app.config["REDIS_HOST"],
 def index():
     return render_template("index.html")
 
+
 @app.route("/<me>")
-def player(me):
-    return render_template("player.html", me=me)
+def get(me):
+    state = str(redis.get(me))
+    return jsonify({"who": me, "state": state})
+
 
 @app.route("/<me>/<my_coin>")
-def output(me, my_coin):
+def set(me, my_coin):
     redis.set(me, my_coin)
-    other = {"alice":"bob", "bob":"alice"}[me]
-    other_coin = redis.get(other)
-    if other_coin == None:
-        return render_template("waiting.html", me=me, my_coin=my_coin, other=other)
+    msg = "Set {}'s coin to {}".format(me, my_coin)
+    return jsonify({"message": msg})
+
+
+@app.route("/reset")
+def reset():
+    redis.set("alice", None)
+    redis.set("bob", None)
+    msg = "Reset the game"
+    return jsonify({"message": msg})
+
+
+@app.route("/poll")
+def poll():
+    a = redis.get("alice")
+    b = redis.get("bob")
+    if a and b:
+        return jsonify({"ready": "true", "coins": [a, b]})
     else:
-        redis.delete(other)
-        output = str(random.randint(0,100))
-        return render_template("output.html", me=me, other=other, my_coin=my_coin, other_coin=other_coin, output=output)
+        return jsonify({"ready": "false"})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")

@@ -4,20 +4,24 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1" name="viewport">
-  <title>CHSH</title>
-  <link rel="stylesheet" href="static/css.css">
+  <title>{{me.title()}}</title>
+  <link rel="stylesheet" href="/static/css.css">
+  <script src="/static/jquery.js"></script>
+  <script src="/static/main.js"></script>
 </head>
 
 <body>
 
-<h1>CHSH</h1>
-
-<p>Who are you?</p>
+<p>
+Hi <b>{{me.title()}}</b>.
+What did you flip? 
+</p>
 
 <ul>
-    <li> <a href="/alice">Alice</a>
-    <li> <a href="/bob">Bob</a>
+    <li><a id=heads href="#">I flipped heads</a> 
+    <li><a id=tails href="#">I flipped tails</a>
 </ul>
+
 
 </body>
 </html>
