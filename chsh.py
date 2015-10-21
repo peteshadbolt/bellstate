@@ -6,6 +6,8 @@ import re
 import random
 import time
 
+random.seed(12345)
+
 # Monkey patch arrow's terminology
 arrow.locales.EnglishLocale.timeframes["now"] = "now"
 
@@ -35,7 +37,7 @@ def output(me, my_coin):
         return render_template("waiting.html", me=me, my_coin=my_coin, other=other)
     else:
         redis.delete(other)
-        output = "dunno"
+        output = str(random.randint(0,100))
         return render_template("output.html", me=me, other=other, my_coin=my_coin, other_coin=other_coin, output=output)
 
 if __name__ == "__main__":
