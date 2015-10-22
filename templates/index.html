@@ -16,20 +16,25 @@
     <p> Who are you?  </p>
 
     <ul>
-        <li id=alice> I'm <a href="#" onclick="setName('alice');">Alice</a>.
-        <li id=bob> I'm <a href="#" onclick="setName('bob');">Bob</a>.
+        <li id=alice> I'm <a onclick="setName('alice');">Alice</a>.
+        <li id=bob> I'm <a onclick="setName('bob');">Bob</a>.
     </ul>
 </div>
 
-<p id=greeting style="display:none;">
+<p id=greeting>
 </p>
 
+<div id=coins style="display:none;">
 <p> What's your coin flip?  </p>
 
 <ul>
-    <li id=heads>I got <a href="#" onclick="setCoin('heads');">heads</a> 
-    <li id=tails>I got <a href="#" onclick="setCoin('tails');">tails</a>
+    <li id=heads>I got <a onclick="setCoin('heads');">heads</a> 
+    <li id=tails>I got <a onclick="setCoin('tails');">tails</a>
 </ul>
+
+<p id=output>
+</p>
+</div>
 
 
 </body>

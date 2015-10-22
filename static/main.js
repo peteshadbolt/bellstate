@@ -1,5 +1,10 @@
 var myName;
 var pollInterval;
+var output;
+
+window.onload = function () {
+    output = $("#output");
+}
 
 String.prototype.capitalize = function() {
     return this.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
@@ -8,9 +13,19 @@ String.prototype.capitalize = function() {
 function setName(name) {
     myName = name;
     $("#whoareyou").hide();
-    $("#greeting").html("Hi <b>"+name.capitalize()+"</b>!");
-    $("#greeting").show();
+    $("#greeting").html("Hi <b>"+name.capitalize()+"</b>.");
     console.log("Set name to " + name);
+    $("#coins").show();
+    reset();
+}
+
+function reset() {
+    $.ajax({
+      url: "/reset",
+      dataType: 'html',
+      success: function () { },
+      error: function () { }
+    });
 }
 
 function setCoin(coin) {
@@ -22,11 +37,18 @@ function setCoin(coin) {
     });
     clearInterval(pollInterval);
     pollInterval = setInterval(poll, 500);
-    console.log("Set coin state to " + coin);
+    output.html("You used the \"<b>"+coin+"</b>\" optic...");
 }
 
 function onPoll(data) {
-    console.log(data);
+    if (data.ready=="true"){
+        output.html("The <b>" + data.output[myName] + "</b> detector clicked.");
+        console.log("Finished");
+        clearInterval(pollInterval);
+        setTimeout(reset, 1000);
+    } else {
+        output.html(output.html()+".");
+    }
 }
 
 function poll() {
