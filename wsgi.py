@@ -1,5 +1,4 @@
 #!/usr/bin/python
-import os
 from bellstate import app as application
 
 if __name__ == '__main__':
