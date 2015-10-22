@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1" name="viewport">
-  <title>{{me.title()}}</title>
+  <title>Bell test</title>
   <link rel="stylesheet" href="/static/css.css">
   <script src="/static/jquery.js"></script>
   <script src="/static/main.js"></script>
@@ -12,14 +12,23 @@
 
 <body>
 
-<p>
-Hi <b>{{me.title()}}</b>.
-What did you flip? 
+<div id=whoareyou>
+    <p> Who are you?  </p>
+
+    <ul>
+        <li id=alice> I'm <a href="#" onclick="setName('alice');">Alice</a>.
+        <li id=bob> I'm <a href="#" onclick="setName('bob');">Bob</a>.
+    </ul>
+</div>
+
+<p id=greeting style="display:none;">
 </p>
 
+<p> What's your coin flip?  </p>
+
 <ul>
-    <li><a id=heads href="#">I flipped heads</a> 
-    <li><a id=tails href="#">I flipped tails</a>
+    <li id=heads>I got <a href="#" onclick="setCoin('heads');">heads</a> 
+    <li id=tails>I got <a href="#" onclick="setCoin('tails');">tails</a>
 </ul>
 
 

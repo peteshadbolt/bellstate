@@ -1,6 +1,6 @@
 #!/usr/bin/python
 import os
-from chsh import app as application
+from bellstate import app as application
 
 if __name__ == '__main__':
     from wsgiref.simple_server import make_server
