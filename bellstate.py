@@ -13,20 +13,6 @@ redis = StrictRedis(app.config["REDIS_HOST"],
                     password=app.config["REDIS_PASSWORD"])
 
 
-#function bellstate(alice_flip, bob_flip){
-    #var p_same = Math.pow(Math.cos(Math.PI/8),2)
-    #var p_different = 1 - p_same;
-    #if (alice_flip=="tails" && bob_flip=="tails"){
-        #// Swap the probabilities
-        #var temp = p_same, p_same = p_different, p_different=temp;
-    #}
-    #var r = Math.random();
-    #var opposite = {"circle":"triangle", "triangle":"circle"};
-    #var alice_output = Math.random() < 0.5 ? "circle" : "triangle";
-    #var bob_output = Math.random() < p_same ? alice_output : opposite[alice_output];
-    #return {"alice":alice_output, "bob":bob_output}
-#}
-
 def bellstate(a, b):
     p_same = math.pow(math.cos(math.pi/8), 2)
     if a=="tails" and b=="tails": p_same = 1-p_same
