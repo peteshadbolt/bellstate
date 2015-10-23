@@ -25,6 +25,9 @@ def bellstate(a, b):
 def index():
     return render_template("index.html")
 
+@app.route("/<me>")
+def play(me):
+    return render_template("play.html", me=me)
 
 @app.route("/<me>/<coin>")
 def set(me, coin):
@@ -41,15 +44,11 @@ def set(me, coin):
         color = "red" if random() < 0.5  else "blue"
         
     redis.hmset(me, {"coin": coin, "color": color})
-    return jsonify({me:{"coin":coin, "color": color}, other_name: other})
+    
 
 
-@app.route("/reset")
-def reset():
-    redis.set("alice", None)
-    redis.set("bob", None)
-    msg = "Reset the game"
-    return jsonify({"message": msg})
+
+    return render_template("output.html", me=me, coin=coin, color=color)
 
 
 if __name__ == "__main__":

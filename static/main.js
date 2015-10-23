@@ -1,42 +1,26 @@
-var myName;
-var pollInterval;
-var output;
+var gc, gd;
 
-window.onload = function () {
-    output = $("#output");
+var t=0;
+var px=0;
+var py=0;
+
+// Run on startup
+window.onload=main;
+
+function main() {
+    // Set up the drawing environment and fit to window
+    gc=document.getElementById('canvas');
+    ctx=gc.getContext('2d');
+    setInterval(update, 30);
 }
 
-String.prototype.capitalize = function() {
-    return this.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
-};
-
-function setName(name) {
-    myName = name;
-    $("#whoareyou").hide();
-    $("#greeting").html(name.capitalize());
-    console.log("Set name to " + name);
-    $("#coins").show();
-    reset();
-}
-
-function reset() {
-    $.ajax({
-      url: "/reset",
-      dataType: 'html',
-      success: function () { },
-      error: function () { }
-    });
-}
-
-function setCoin(coin) {
-    $.ajax({
-      url: "/"+myName+"/"+coin,
-      dataType: 'html',
-      success: onPoll,
-      error: function () { }
-    });
-}
-
-function onPoll(data) {
-    output.html(data);
+function update(argument) {
+    t += 0.5;
+    px = 20 + Math.cos(t)*10;
+    py = 50 + Math.sin(t)*10;
+    ctx.clearRect(0, 0, gc.width, gc.height);
+    ctx.beginPath();
+    ctx.arc(px, py, 5, 0, 2*Math.PI, false);
+    ctx.fillStyle = "red";
+    ctx.fill();
 }

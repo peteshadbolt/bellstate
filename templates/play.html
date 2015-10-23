@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1" name="viewport">
-  <title>Bell test</title>
+  <title>Bell test - {{me}}</title>
   <link rel="stylesheet" href="/static/css.css">
   <script src="/static/jquery.js"></script>
   <script src="/static/main.js"></script>
@@ -12,9 +12,19 @@
 
 <body>
 
-<p> <b>Who are you?</b> </p>
-<p> I'm <a href="/alice">Alice</a>.</p>
-<p> I'm <a href="/bob">Bob</a>.</p>
+<p id=greeting>
+{{me.title()}}
+</p>
+
+<p>
+<canvas id=canvas width=300 height=100> </canvas> 
+</p>
+
+<p> What's your coin flip?  </p>
+
+<div id=heads>I got <a href="/{{me}}/heads">heads</a></div> 
+<div id=tails>I got <a href="/{{me}}/tails">tails</a></div>
+
 
 </body>
 </html>

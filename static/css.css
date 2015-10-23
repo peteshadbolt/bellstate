@@ -3,38 +3,12 @@ body {
     padding: 1em;
     margin: auto;
     font-size: 20pt;
-    /*background-color:red;*/
     max-width:500px;
-    text-align:center;
-}
-
-#whoareyou{
-    /*background-color: yellow;*/
-    padding: 0em;
-    margin: auto 0em;
 }
 
 #greeting{
-    /*background-color: lightgreen;*/
+    font-weight: bold;
 }
 
-#alice{
-    /*background-color: lightgreen;*/
-    float:left;
-}
+a { color: darkblue; }
 
-#bob{
-    /*background-color: lightblue;*/
-    float:right;
-}
-
-#cf{
-    clear:both;
-}
-
-a {
-    color: darkblue;
-    text-decoration: underline;
-}
-
-a:hover { cursor: pointer; }
