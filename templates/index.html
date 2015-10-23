@@ -13,12 +13,12 @@
 <body>
 
 <div id=whoareyou>
-    <p> Who are you?  </p>
-
-    <ul>
-        <li id=alice> I'm <a onclick="setName('alice');">Alice</a>.
-        <li id=bob> I'm <a onclick="setName('bob');">Bob</a>.
-    </ul>
+    <p>
+    Who are you?  
+    </p>
+    <div id=alice> I'm <a onclick="setName('alice');">Alice</a>.</div>
+    <div id=bob> I'm <a onclick="setName('bob');">Bob</a>.</div>
+    <div id=cf></div>
 </div>
 
 <p id=greeting>
@@ -27,10 +27,8 @@
 <div id=coins style="display:none;">
 <p> What's your coin flip?  </p>
 
-<ul>
-    <li id=heads>I got <a onclick="setCoin('heads');">heads</a> 
-    <li id=tails>I got <a onclick="setCoin('tails');">tails</a>
-</ul>
+<div id=heads>I got <a onclick="setCoin('heads');">heads</a></div> 
+<div id=tails>I got <a onclick="setCoin('tails');">tails</a></div>
 
 <p id=output>
 </p>

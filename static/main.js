@@ -13,7 +13,7 @@ String.prototype.capitalize = function() {
 function setName(name) {
     myName = name;
     $("#whoareyou").hide();
-    $("#greeting").html("Hi <b>"+name.capitalize()+"</b>.");
+    $("#greeting").html(name.capitalize());
     console.log("Set name to " + name);
     $("#coins").show();
     reset();
@@ -32,32 +32,11 @@ function setCoin(coin) {
     $.ajax({
       url: "/"+myName+"/"+coin,
       dataType: 'html',
-      success: function () { },
+      success: onPoll,
       error: function () { }
     });
-    clearInterval(pollInterval);
-    pollInterval = setInterval(poll, 500);
-    output.html("You used the \"<b>"+coin+"</b>\" optic...");
 }
 
 function onPoll(data) {
-    if (data.ready=="true"){
-        output.html("The <b>" + data.output[myName] + "</b> detector clicked.");
-        console.log("Finished");
-        clearInterval(pollInterval);
-        setTimeout(reset, 1000);
-    } else {
-        output.html(output.html()+".");
-    }
+    output.html(data);
 }
-
-function poll() {
-    $.ajax({
-      url: "/poll",
-      dataType: 'json',
-      success: onPoll,
-      error: function( data ) { console.log( "Page error"); }
-    });
-}
-
-

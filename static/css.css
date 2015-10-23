@@ -1,7 +1,35 @@
 body {
     font-family: Helvetica, "Nimbus Sans L", "Liberation Sans", Arial, sans-serif;
-    padding-left: 1em;
-    font-size: 12pt;
+    padding: 1em;
+    margin: auto;
+    font-size: 20pt;
+    /*background-color:red;*/
+    max-width:500px;
+    text-align:center;
+}
+
+#whoareyou{
+    /*background-color: yellow;*/
+    padding: 0em;
+    margin: auto 0em;
+}
+
+#greeting{
+    /*background-color: lightgreen;*/
+}
+
+#alice{
+    /*background-color: lightgreen;*/
+    float:left;
+}
+
+#bob{
+    /*background-color: lightblue;*/
+    float:right;
+}
+
+#cf{
+    clear:both;
 }
 
 a {

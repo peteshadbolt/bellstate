@@ -12,6 +12,8 @@ redis = StrictRedis(app.config["REDIS_HOST"],
                     db=0,
                     password=app.config["REDIS_PASSWORD"])
 
+SWAP_PLAYER = {"alice":"bob", "bob":"alice"}
+SWAP_COLOR = {"red":"blue", "blue":"red"}
 
 def bellstate(a, b):
     p_same = math.pow(math.cos(math.pi/8), 2)
@@ -24,17 +26,22 @@ def index():
     return render_template("index.html")
 
 
-@app.route("/<me>")
-def get(me):
-    state = str(redis.get(me))
-    return jsonify({"who": me, "state": state})
+@app.route("/<me>/<coin>")
+def set(me, coin):
+    other_name = SWAP_PLAYER[me]
 
-
-@app.route("/<me>/<my_coin>")
-def set(me, my_coin):
-    redis.set(me, my_coin)
-    msg = "Set {}'s coin to {}".format(me, my_coin)
-    return jsonify({"message": msg})
+    #Decide my color
+    if redis.exists(other_name):
+        other = redis.hgetall(other_name)
+        p_same = math.pow(math.cos(math.pi/8), 2)
+        if coin == "tails" and other["coin"] == "tails": p_same = 1-p_same
+        color = other["color"] if random()<p_same else SWAP_COLOR[other["color"]]
+    else:
+        other = {}
+        color = "red" if random() < 0.5  else "blue"
+        
+    redis.hmset(me, {"coin": coin, "color": color})
+    return jsonify({me:{"coin":coin, "color": color}, other_name: other})
 
 
 @app.route("/reset")
@@ -44,17 +51,6 @@ def reset():
     msg = "Reset the game"
     return jsonify({"message": msg})
 
-
-@app.route("/poll")
-def poll():
-    a = redis.get("alice")
-    b = redis.get("bob")
-    if a!="None" and b!="None":
-        output = bellstate(a, b)
-        output = {"alice": output[0], "bob":output[1]}
-        return jsonify({"ready": "true", "coins": [a, b], "output": output})
-    else:
-        return jsonify({"ready": "false"})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
