@@ -44,10 +44,6 @@ def set(me, coin):
         color = "red" if random() < 0.5  else "blue"
         
     redis.hmset(me, {"coin": coin, "color": color})
-    
-
-
-
     return render_template("result.html", me=me, coin=coin, color=color)
 
 

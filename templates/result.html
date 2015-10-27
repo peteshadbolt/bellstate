@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <title>Bell test - {{me.title()}}</title>
+  <link rel="stylesheet" href="/static/css.css">
+  <script src="/static/shared.js"></script>
+  <script src="/static/result.js"></script>
+</head>
+
+<body>
+
+<p id=greeting>
+{{me.title()}} flipped <span id=coin>{{coin}}</span>
+</p>
+
+<p>
+<canvas id="canvas" width=300 height=100></canvas>
+</p>
+
+
+<div id="result" style="display:none">
+<p>
+The <span id=color style="color:{{color}};">{{color}}</span> detector clicked.
+</p>
+
+<p>
+<a href="/{{me}}">Play again?</a>
+</p>
+</div>
+
+
+</body>
+</html>

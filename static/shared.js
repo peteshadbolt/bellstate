@@ -5,13 +5,17 @@ img.measure = new Image();
 img.measure.src = '/static/measure.png';
 img.waveplate = new Image();
 img.waveplate.src = '/static/waveplate.png';
+img.flash = new Image();
+img.flash.src = '/static/flash.png';
 
 var t=0;
 var px=0;
 var py=0;
 
 var beamY;
-var wpX=120;
+var wpX=100;
+var measureX = 150;
+var updateInterval;
 
 function drawPhoton(ctx, px, py) {
     ctx.beginPath();
@@ -36,7 +40,7 @@ window.onload=main;
 function main() {
     gc=document.getElementById('canvas');
     ctx=gc.getContext('2d');
-    setInterval(update, 30);
+    updateInterval = setInterval(update, 30);
     beamY=gc.height/2;
 }
 

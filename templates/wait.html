@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <title>Bell test - {{me.title()}}</title>
+  <link rel="stylesheet" href="/static/css.css">
+  <script src="/static/shared.js"></script>
+  <script src="/static/wait.js"></script>
+</head>
+
+<body>
+
+<p id=greeting>
+{{me.title()}}
+</p>
+
+<p>
+<canvas id="canvas" width=300 height=100></canvas>
+</p>
+
+<p> What's your coin flip?  </p>
+
+<div id=heads>I got <a href="/{{me}}/heads">heads</a></div> 
+<div id=tails>I got <a href="/{{me}}/tails">tails</a></div>
+
+
+</body>
+</html>
