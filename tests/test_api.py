@@ -67,8 +67,8 @@ class APITestCase(unittest.TestCase):
             r = self.app.get('/{}/{}'.format(who, coin), headers=JSON_HEADER)
             data = json.loads(r.data)
             scores[data[who]["coin"]]+=1
-        assert abs(scores["heads"]-scores["tails"])<sqrt(n)
 
+        assert abs(scores["heads"]-scores["tails"])<sqrt(n)
 
 
 if __name__ == '__main__':
