@@ -6,8 +6,6 @@
   <meta content="width=device-width, initial-scale=1" name="viewport">
   <title>Bell test - {{me.title()}}</title>
   <link rel="stylesheet" href="/static/css.css">
-  <script src="/static/jquery.js"></script>
-  <script src="/static/main.js"></script>
 </head>
 
 <body>
@@ -17,28 +15,11 @@
 </p>
 
 <p>
-<canvas id=canvas width=300 height=100> </canvas> 
+<img src="/static/fired.gif"/> 
 </p>
 
-<p> What's your coin flip?  </p>
-
-
-<div id=heads>
-    I got heads
-    {% if coin=="heads" %}
-    &#10004;
-    {% endif %}
-</div> 
-<div id=tails>
-    I got tails
-    {% if coin=="tails" %}
-    &#10004;
-    {% endif %}
-</div>
-
-
 <p id=output>
-The <b style="color:{{color}};">{{color}}</b> detector clicked.
+The <span style="color:{{color}};">{{color}}</span> detector clicked.
 </p>
 
 <p>
