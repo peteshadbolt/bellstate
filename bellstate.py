@@ -27,7 +27,7 @@ def index():
 
 @app.route("/<me>")
 def play(me):
-    return render_template("play.html", me=me)
+    return render_template("wait.html", me=me)
 
 @app.route("/<me>/<coin>")
 def set(me, coin):
@@ -48,7 +48,7 @@ def set(me, coin):
 
 
 
-    return render_template("output.html", me=me, coin=coin, color=color)
+    return render_template("result.html", me=me, coin=coin, color=color)
 
 
 if __name__ == "__main__":

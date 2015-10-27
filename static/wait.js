@@ -1,8 +1,9 @@
 function update(argument) {
     ctx.clearRect(0, 0, gc.width, gc.height);
 
-    // Draw the PBS
-    ctx.drawImage(img.measure, 180, 37);
+    // Draw the PBS and waveplate
+    ctx.drawImage(img.measure, 180, beamY-img.measure.height/2);
+    ctx.drawImage(img.waveplate, wpX, beamY - img.waveplate.height/2);
 
     // Draw the photon, spinning around
     t += 0.3;
@@ -10,3 +11,4 @@ function update(argument) {
     py = 50 + Math.sin(t)*10;
     drawPhoton(ctx, px, py);
 }
+

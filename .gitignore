@@ -1,3 +1,4 @@
+*.png
 dump.rdb
 .openshift
 # Byte-compiled / optimized / DLL files
