@@ -31,7 +31,7 @@ function flash(ctx, show){
     ctx.drawImage(img.measure, measureX, beamY-img.measure.height/2);
     drawRotatedImage(ctx, img.waveplate, angle, wpX, beamY);
     if (show){
-        drawRotatedImage(ctx, img.flash, 0, measureX+img.measure.width-8, beamY+18*sign);
+        drawRotatedImage(ctx, img.flash, 0, measureX+img.measure.width-5, beamY+19*sign);
     }
 }
 

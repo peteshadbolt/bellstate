@@ -15,6 +15,14 @@ redis = StrictRedis(app.config["REDIS_HOST"],
 SWAP_PLAYER = {"alice":"bob", "bob":"alice"}
 SWAP_COLOR = {"red":"blue", "blue":"red"}
 
+def request_wants_json():
+    """ Nicked from http://flask.pocoo.org/snippets/45/ """
+    best = request.accept_mimetypes \
+        .best_match(["application/json", "text/html"])
+    return best == "application/json" and \
+        request.accept_mimetypes[best] > \
+        request.accept_mimetypes["text/html"]
+
 def bellstate(a, b):
     p_same = math.pow(math.cos(math.pi/8), 2)
     if a=="tails" and b=="tails": p_same = 1-p_same
@@ -27,6 +35,7 @@ def index():
 
 @app.route("/<me>")
 def play(me):
+    redis.delete(me)
     return render_template("wait.html", me=me)
 
 @app.route("/<me>/<coin>")
@@ -44,7 +53,12 @@ def set(me, coin):
         color = "red" if random() < 0.5  else "blue"
         
     redis.hmset(me, {"coin": coin, "color": color})
-    return render_template("result.html", me=me, coin=coin, color=color)
+
+    if request_wants_json():
+        data = {me: {"coin": coin, "color":color}, other_name:other}
+        return jsonify(data)
+    else:
+        return render_template("result.html", me=me, coin=coin, color=color)
 
 
 if __name__ == "__main__":
