@@ -3,6 +3,7 @@ from flask import Flask, request, jsonify, render_template, redirect
 from redis import StrictRedis
 import math
 from random import random
+from shortuuid import ShortUUID
 
 # Boot the app
 app = Flask(__name__)
@@ -14,6 +15,7 @@ redis = StrictRedis(app.config["REDIS_HOST"],
 
 SWAP_PLAYER = {"alice":"bob", "bob":"alice"}
 SWAP_COLOR = {"red":"blue", "blue":"red"}
+UUID_TIMEOUT = 60
 
 def request_wants_json():
     """ Nicked from http://flask.pocoo.org/snippets/45/ """
@@ -31,20 +33,27 @@ def bellstate(a, b):
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    if redis.exists("uuid"):
+        uuid = redis.get("uuid")
+        redis.delete("uuid")
+    else:
+        uuid = ShortUUID().random(length=10)
+        redis.set("uuid", uuid)
+        redis.expire("uuid", UUID_TIMEOUT)
+    return render_template("index.html", uuid=uuid)
 
-@app.route("/<me>")
-def play(me):
-    redis.delete(me)
-    return render_template("wait.html", me=me)
+@app.route("/<uuid>/<me>")
+def play(uuid, me):
+    redis.delete(uuid+":"+me)
+    return render_template("wait.html", me=me, uuid=uuid)
 
-@app.route("/<me>/<coin>")
-def set(me, coin):
+@app.route("/<uuid>/<me>/<coin>")
+def set(uuid, me, coin):
     other_name = SWAP_PLAYER[me]
 
     #Decide my color
-    if redis.exists(other_name):
-        other = redis.hgetall(other_name)
+    if redis.exists(uuid+":"+other_name):
+        other = redis.hgetall(uuid+":"+other_name)
         p_same = math.pow(math.cos(math.pi/8), 2)
         if coin == "tails" and other["coin"] == "tails": p_same = 1-p_same
         color = other["color"] if random()<p_same else SWAP_COLOR[other["color"]]
@@ -52,13 +61,13 @@ def set(me, coin):
         other = {}
         color = "red" if random() < 0.5  else "blue"
         
-    redis.hmset(me, {"coin": coin, "color": color})
+    redis.hmset(uuid+":"+me, {"coin": coin, "color": color})
 
     if request_wants_json():
         data = {me: {"coin": coin, "color":color}, other_name:other}
         return jsonify(data)
     else:
-        return render_template("result.html", me=me, coin=coin, color=color)
+        return render_template("result.html", me=me, coin=coin, color=color, uuid=uuid)
 
 
 if __name__ == "__main__":

@@ -22,15 +22,15 @@ class APITestCase(unittest.TestCase):
 
     def simple_test(self):
         """ First attempt at an API"""
-        response = self.app.get('/alice/heads', headers=JSON_HEADER)
+        response = self.app.get('/uuid/alice/heads', headers=JSON_HEADER)
         assert response.status_code == 200
         data = json.loads(response.data)
         assert data["bob"]=={}
 
     def cheat_test(self):
         """ Check that we get all the data needed to cheat """
-        response = self.app.get('/alice/heads', headers=JSON_HEADER)
-        response = self.app.get('/bob/heads', headers=JSON_HEADER)
+        response = self.app.get('/uuid/alice/heads', headers=JSON_HEADER)
+        response = self.app.get('/uuid/bob/heads', headers=JSON_HEADER)
         data = json.loads(response.data)
         assert data["alice"]!={}
         assert data["bob"]!={}
@@ -39,8 +39,8 @@ class APITestCase(unittest.TestCase):
     def runonce(self):
         a = "heads" if random()<0.5 else "tails"
         b = "heads" if random()<0.5 else "tails"
-        r = self.app.get('/alice/'+a, headers=JSON_HEADER)
-        r = self.app.get('/bob/'+b, headers=JSON_HEADER)
+        r = self.app.get('/uuid/alice/'+a, headers=JSON_HEADER)
+        r = self.app.get('/uuid/bob/'+b, headers=JSON_HEADER)
         data = json.loads(r.data)
         A = data["alice"]["color"]
         B = data["bob"]["color"]
@@ -64,7 +64,7 @@ class APITestCase(unittest.TestCase):
         for i in range(n):
             who = "alice" if random()<0.5 else "bob"
             coin = "heads" if random()<0.5 else "tails"
-            r = self.app.get('/{}/{}'.format(who, coin), headers=JSON_HEADER)
+            r = self.app.get('/uuid/{}/{}'.format(who, coin), headers=JSON_HEADER)
             data = json.loads(r.data)
             scores[data[who]["coin"]]+=1
 

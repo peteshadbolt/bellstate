@@ -14,5 +14,12 @@ body {
     /*border: 1px solid gray;*/
 }
 
+#uuid{
+    color: gray;
+    font-size:10pt;
+    position: fixed;
+    bottom: 0;
+}
+
 a { color: darkblue; }
 
