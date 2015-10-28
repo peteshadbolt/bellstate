@@ -43,8 +43,6 @@ def index():
     else:
         uuid = ShortUUID().random(length=10)
         redis.set("uuid", uuid)
-        redis.set(uuid + ":score", 0)
-        redis.set(uuid + ":attempts", 0)
         redis.expire("uuid", UUID_TIMEOUT)
     return render_template("index.html", uuid=uuid)
 
@@ -67,33 +65,20 @@ def set(uuid, me, coin):
             p_same = 1 - p_same
         color = other["color"] if random() < p_same else SWAP_COLOR[
             other["color"]]
-
-        redis.incr(uuid + ":attempts")
-        if coin == "heads" or other["coin"] == "heads" and color == other["color"]:
-            redis.incr(uuid + ":score")
-        if coin == "tails" and other["coin"] == "tails" and color != other["color"]:
-            redis.incr(uuid + ":score")
     else:
         other = {}
         color = "red" if random() < 0.5 else "blue"
-
-    # Read the current score and number of attempts
-    score = redis.get(uuid + ":score")
-    attempts = redis.get(uuid + ":attempts")
 
     # Set my state
     redis.hmset(uuid + ":" + me, {"coin": coin, "color": color})
 
     if request_wants_json():
         data = {me: {"coin": coin, "color": color},
-                other_name: other,
-                "score": score,
-                "attempts": attempts}
+                other_name: other}
         return jsonify(data)
     else:
         return render_template("result.html", 
-                me=me, coin=coin, color=color, uuid=uuid, 
-                score=score, attempts=attempts)
+                me=me, coin=coin, color=color, uuid=uuid)
 
 
 if __name__ == "__main__":
