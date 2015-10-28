@@ -13,9 +13,10 @@ redis = StrictRedis(app.config["REDIS_HOST"],
                     db=0,
                     password=app.config["REDIS_PASSWORD"])
 
-SWAP_PLAYER = {"alice":"bob", "bob":"alice"}
-SWAP_COLOR = {"red":"blue", "blue":"red"}
+SWAP_PLAYER = {"alice": "bob", "bob": "alice"}
+SWAP_COLOR = {"red": "blue", "blue": "red"}
 UUID_TIMEOUT = 60
+
 
 def request_wants_json():
     """ Nicked from http://flask.pocoo.org/snippets/45/ """
@@ -25,11 +26,14 @@ def request_wants_json():
         request.accept_mimetypes[best] > \
         request.accept_mimetypes["text/html"]
 
+
 def bellstate(a, b):
-    p_same = math.pow(math.cos(math.pi/8), 2)
-    if a=="tails" and b=="tails": p_same = 1-p_same
-    x, y = ("red", "blue") if random() < 0.5  else ("red", "blue")
+    p_same = math.pow(math.cos(math.pi / 8), 2)
+    if a == "tails" and b == "tails":
+        p_same = 1 - p_same
+    x, y = ("red", "blue") if random() < 0.5 else ("red", "blue")
     return (x, x) if random() < p_same else (x, y)
+
 
 @app.route("/")
 def index():
@@ -39,46 +43,57 @@ def index():
     else:
         uuid = ShortUUID().random(length=10)
         redis.set("uuid", uuid)
-        redis.set(uuid+":score", 0)
-        redis.set(uuid+":attempts", 0)
+        redis.set(uuid + ":score", 0)
+        redis.set(uuid + ":attempts", 0)
         redis.expire("uuid", UUID_TIMEOUT)
     return render_template("index.html", uuid=uuid)
 
+
 @app.route("/<uuid>/<me>")
 def play(uuid, me):
-    redis.delete(uuid+":"+me)
+    redis.delete(uuid + ":" + me)
     return render_template("wait.html", me=me, uuid=uuid)
+
 
 @app.route("/<uuid>/<me>/<coin>")
 def set(uuid, me, coin):
     other_name = SWAP_PLAYER[me]
 
-    #Decide my color
-    if redis.exists(uuid+":"+other_name):
-        other = redis.hgetall(uuid+":"+other_name)
-        p_same = math.pow(math.cos(math.pi/8), 2)
-        if coin == "tails" and other["coin"] == "tails": p_same = 1-p_same
-        color = other["color"] if random()<p_same else SWAP_COLOR[other["color"]]
+    # Decide my color
+    if redis.exists(uuid + ":" + other_name):
+        other = redis.hgetall(uuid + ":" + other_name)
+        p_same = math.pow(math.cos(math.pi / 8), 2)
+        if coin == "tails" and other["coin"] == "tails":
+            p_same = 1 - p_same
+        color = other["color"] if random() < p_same else SWAP_COLOR[
+            other["color"]]
 
-        redis.incr(uuid+":attempts")    
-        if coin=="heads" or other["coin"]=="heads" and color == other["color"]:
-            redis.incr(uuid+":score")    
-        if coin=="tails" and other["coin"]=="tails" and color != other["color"]:
-            redis.incr(uuid+":score")    
+        redis.incr(uuid + ":attempts")
+        if coin == "heads" or other["coin"] == "heads" and color == other["color"]:
+            redis.incr(uuid + ":score")
+        if coin == "tails" and other["coin"] == "tails" and color != other["color"]:
+            redis.incr(uuid + ":score")
     else:
         other = {}
-        color = "red" if random() < 0.5  else "blue"
+        color = "red" if random() < 0.5 else "blue"
 
-    score = redis.get(uuid+":score")
-    attempts = redis.get(uuid+":attempts")
+    # Read the current score and number of attempts
+    score = redis.get(uuid + ":score")
+    attempts = redis.get(uuid + ":attempts")
 
-    redis.hmset(uuid+":"+me, {"coin": coin, "color": color})
+    # Set my state
+    redis.hmset(uuid + ":" + me, {"coin": coin, "color": color})
 
     if request_wants_json():
-        data = {me: {"coin": coin, "color":color}, other_name:other}
+        data = {me: {"coin": coin, "color": color},
+                other_name: other,
+                "score": score,
+                "attempts": attempts}
         return jsonify(data)
     else:
-        return render_template("result.html", me=me, coin=coin, color=color, uuid=uuid, score=score, attempts=attempts)
+        return render_template("result.html", 
+                me=me, coin=coin, color=color, uuid=uuid, 
+                score=score, attempts=attempts)
 
 
 if __name__ == "__main__":
